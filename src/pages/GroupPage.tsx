@@ -76,7 +76,6 @@ export const GroupPage: React.FC = () => {
                         <li><strong><GlossaryLink termKey="cyclic" capitalize>Cyclic</GlossaryLink>?</strong> {props.isCyclic ? 'Yes' : 'No'}</li>
                         <li><strong><GlossaryLink termKey="abelian" capitalize>Abelian</GlossaryLink>?</strong> {props.isAbelian ? 'Yes' : 'No'}</li>
                         <li><strong><GlossaryLink termKey="simple" capitalize>Simple</GlossaryLink>?</strong> {props.isSimple ? 'Yes' : 'No'}</li>
-                        <li><strong>Min Generators:</strong> {props.minGenerators || '?'}</li>
                         <li><strong><GlossaryLink termKey="conjugacy class" capitalize>Conjugacy Classes</GlossaryLink>:</strong> {classes.length}</li>
                     </ul>
                 </section>
