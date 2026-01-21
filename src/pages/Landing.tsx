@@ -1,4 +1,3 @@
-
 // src/pages/Landing.tsx
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
@@ -139,11 +138,8 @@ export const Landing: React.FC = () => {
                                     })()}
                                 </div>
                                 <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
-                                    {g.normalCount} normal subgroups
+                                    {g.normalCount} normal subgroups{g.normalCount === 2 ? ' ⇒ simple' : ''}
                                 </div>
-                                {g.props.isSimple && !(primes.includes(g.props.order)) && (
-                                    <div style={{ color: 'green', marginTop: '0.2rem' }}>Simple</div>
-                                )}
                             </div>
                         </Link>
                     ))}
