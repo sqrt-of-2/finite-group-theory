@@ -82,7 +82,7 @@ export const GroupPage: React.FC = () => {
 
                 <section id="subgroups" className="section">
                     <h2>Subgroup Lattice</h2>
-                    <SubgroupLattice subgroups={subgroups} groupOrder={props.order} />
+                    <SubgroupLattice subgroups={subgroups} group={group} />
                 </section>
 
                 <section id="quotients" className="section">
