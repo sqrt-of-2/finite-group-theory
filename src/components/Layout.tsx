@@ -28,7 +28,7 @@ export const Layout: React.FC = () => {
             </nav>
 
             <div className="container" style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
-                <Link to="/">Home</Link>
+                {parts.length > 0 && <Link to="/">Home</Link>}
                 {parts.map((p, i) => (
                     <span key={i}> &gt; <span style={{ textTransform: 'capitalize' }}>{p}</span></span>
                 ))}

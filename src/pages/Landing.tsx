@@ -54,7 +54,7 @@ export const Landing: React.FC = () => {
         { id: 'Z_2', prefix: 'The smallest non-trivial group', suffix: '(order 2)', tex: 'Z_2' },
         { id: 'Z_2_x_Z_2', prefix: 'The smallest non-cyclic group', suffix: '(order 4)', tex: 'Z_2 \\times Z_2' },
         { id: 'S_3', prefix: 'The smallest non-abelian group', suffix: '(order 6)', tex: 'S_3' },
-        { id: 'D_8', prefix: 'The smallest non-abelian p-groups', suffix: '(order 8)', tex: 'D_8, Q_8', plural: true },
+        { id: 'D_8', prefix: 'The smallest non-abelian p-groups', suffix: '(order 8)', tex: 'D_8', secondTex: 'Q_8' }, // Special handling for D8/Q8
         { id: 'A_4', prefix: 'The smallest group where the converse of Lagrange fails', suffix: '(order 12)', tex: 'A_4' },
         { id: 'A_5', prefix: 'The smallest non-abelian simple group', suffix: '(order 60)', tex: 'A_5' }
     ];
@@ -62,14 +62,22 @@ export const Landing: React.FC = () => {
     return (
         <div className="container">
             <section style={{ margin: '2rem 0' }}>
-                <h2>Notable small groups</h2>
                 <ul className="dense-list">
-                    {notableGroups.map(item => (
+                    {notableGroups.map((item: any) => (
                         <li key={item.id} style={{ marginBottom: '0.5rem' }}>
-                            <span>{item.prefix} {item.plural ? 'are' : 'is'} </span>
+                            <span>{item.prefix} {item.plural || item.secondTex ? 'are' : 'is'} </span>
                             <Link to={`/group/${item.id}`}>
                                 <MathTex tex={item.tex} />
                             </Link>
+                            {item.secondTex && (
+                                <>
+                                    <span> and </span>
+                                    {/* Q8 link logic: hardcoded or inferred? Hardcoded for now. */}
+                                    <Link to={`/group/Q_8`}>
+                                        <MathTex tex={item.secondTex} />
+                                    </Link>
+                                </>
+                            )}
                             <span> {item.suffix}.</span>
                         </li>
                     ))}
