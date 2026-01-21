@@ -120,8 +120,8 @@ export const Landing: React.FC = () => {
                                 <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
                                     {(() => {
                                         const isPrime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59].includes(g.props.order);
-                                        if (isPrime) return <MathTex tex="\text{Prime order} \implies \text{Cyclic} \implies \text{Abelian}" />;
-                                        if (g.props.isCyclic) return <MathTex tex="\text{Cyclic} \implies \text{Abelian}" />;
+                                        if (isPrime) return "Prime order ⇒ Cyclic ⇒ Abelian";
+                                        if (g.props.isCyclic) return "Cyclic ⇒ Abelian";
                                         if (g.props.isAbelian) return "Abelian";
                                         return "Non-abelian";
                                     })()}
