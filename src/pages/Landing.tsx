@@ -34,7 +34,14 @@ export const Landing: React.FC = () => {
     const [filterSimple, setFilterSimple] = useState<boolean | null>(null);
 
     const filtered = allGroups.filter(g => {
-        if (search && !g.name.toLowerCase().includes(search.toLowerCase()) && !g.id.toLowerCase().includes(search.toLowerCase())) return false;
+        const searchLower = search.toLowerCase();
+        if (search) {
+            const matchesName = g.name.toLowerCase().includes(searchLower);
+            const matchesId = g.id.toLowerCase().includes(searchLower);
+            const matchesOrder = g.props.order.toString().includes(searchLower);
+
+            if (!matchesName && !matchesId && !matchesOrder) return false;
+        }
         if (filterAbelian !== null && g.props.isAbelian !== filterAbelian) return false;
         if (filterCyclic !== null && g.props.isCyclic !== filterCyclic) return false;
         if (filterSimple !== null && g.props.isSimple !== filterSimple) return false;
