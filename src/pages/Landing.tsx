@@ -128,7 +128,6 @@ export const Landing: React.FC = () => {
                             <div style={{ fontSize: '0.9rem', color: '#666', marginTop: '0.5rem' }}>
                                 <div>
                                     Order {g.props.order}
-                                    {(primes.includes(g.props.order)) ? ' (prime)' : ''}
                                 </div>
                                 <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
                                     {(() => {
