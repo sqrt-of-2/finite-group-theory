@@ -23,7 +23,7 @@ export const Landing: React.FC = () => {
                 id: group.id,
                 name: group.displayName,
                 props: group.getProperties(),
-                // could add more search terms
+                normalCount: group.getSubgroups().filter(s => s.isNormal).length
             };
         }).filter(Boolean) as any[]; // TODO: proper type
     }, []);
@@ -137,6 +137,9 @@ export const Landing: React.FC = () => {
                                         if (g.props.isAbelian) return "Abelian";
                                         return "Non-abelian";
                                     })()}
+                                </div>
+                                <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
+                                    {g.normalCount} normal subgroups
                                 </div>
                                 {g.props.isSimple && !(primes.includes(g.props.order)) && (
                                     <div style={{ color: 'green', marginTop: '0.2rem' }}>Simple</div>
