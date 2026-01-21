@@ -113,6 +113,16 @@ describe('Landing Page UI', () => {
         expect(q8).toBeDefined();
     });
 
+    it('displays normal subgroup counts', () => {
+        renderWithRouter(<Landing />);
+        // Z_2 has 2 normal subgroups ({e}, Z_2)
+        expect(screen.getAllByText(/2 normal subgroups/).length).toBeGreaterThan(0);
+
+        // S_3 has 3 normal subgroups ({e}, A_3, S_3)
+        // Let's find S_3 card specifically if possible, or just expect "3 normal subgroups" to exist
+        expect(screen.getAllByText(/3 normal subgroups/).length).toBeGreaterThan(0);
+    });
+
     it('navigates to group page when clicking a catalog card', async () => {
         // Need to test navigation. Since we use BrowserRouter, we can check if URL changes or new content renders.
         // But verifying URL change in test environment is slightly tricky without memory router.
