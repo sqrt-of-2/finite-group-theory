@@ -113,9 +113,22 @@ export const Landing: React.FC = () => {
                                 <MathTex tex={g.name} />
                             </div>
                             <div style={{ fontSize: '0.9rem', color: '#666', marginTop: '0.5rem' }}>
-                                <div>Order: {g.props.order}</div>
-                                <div>{g.props.isAbelian ? 'Abelian' : 'Non-Abelian'}</div>
-                                {g.props.isSimple && <div style={{ color: 'green' }}>Simple</div>}
+                                <div>
+                                    Order {g.props.order}
+                                    {([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59].includes(g.props.order)) ? ' (prime)' : ''}
+                                </div>
+                                <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
+                                    {(() => {
+                                        const isPrime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59].includes(g.props.order);
+                                        if (isPrime) return <MathTex tex="\text{Prime order} \implies \text{Cyclic} \implies \text{Abelian}" />;
+                                        if (g.props.isCyclic) return <MathTex tex="\text{Cyclic} \implies \text{Abelian}" />;
+                                        if (g.props.isAbelian) return "Abelian";
+                                        return "Non-abelian";
+                                    })()}
+                                </div>
+                                {g.props.isSimple && !([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59].includes(g.props.order)) && (
+                                    <div style={{ color: 'green', marginTop: '0.2rem' }}>Simple</div>
+                                )}
                             </div>
                         </Link>
                     ))}

@@ -25,21 +25,19 @@ describe('Landing Page UI', () => {
         renderWithRouter(<Landing />);
         const input = screen.getByPlaceholderText('Search groups...');
 
-        // Initial state: check for Z_1 via Order (since KaTeX text is tricky)
-        const order1 = screen.getAllByText('Order: 1');
-        expect(order1.length).toBeGreaterThan(0);
+        // Initial state: check for Z_1 via Order
+        expect(screen.getAllByText(/Order 1/).length).toBeGreaterThan(0);
 
         // Search for "S_3"
         fireEvent.change(input, { target: { value: 'S_3' } });
 
-        // Should show S_3 (Order: 6)
+        // Should show S_3 (Order 6)
         await waitFor(() => {
-            const order6 = screen.getAllByText('Order: 6');
+            const order6 = screen.getAllByText(/Order 6/);
             expect(order6.length).toBeGreaterThan(0);
 
             // Z_1 should be gone
-            const order1After = screen.queryByText('Order: 1');
-            expect(order1After).not.toBeInTheDocument();
+            expect(screen.queryByText(/Order 1/)).not.toBeInTheDocument();
         });
     });
 
@@ -52,18 +50,11 @@ describe('Landing Page UI', () => {
 
         await waitFor(() => {
             // Should show groups of order 8
-            const order8s = screen.getAllByText('Order: 8');
+            const order8s = screen.getAllByText(/Order 8/);
             expect(order8s.length).toBeGreaterThan(0);
 
-            // Specifically check for one that doesn't have "8" in the name
-            // Z_4 x Z_2 is named "Z_4 x Z_2" (no 8)
-            // But we need to find it in the document.
-            // We can check if any of the displayed items is that one.
-            // The ID is Z_4_x_Z_2. 
-            // We can check if element with text "Order: 8" is present.
-            // But simpler: just ensure we found results.
-            // Let's rely on the fact that Z_1 (order 1) is gone.
-            expect(screen.queryByText('Order: 1')).not.toBeInTheDocument();
+            // Z_1 (order 1) is gone.
+            expect(screen.queryByText(/Order 1/)).not.toBeInTheDocument();
         });
     });
 
@@ -75,12 +66,19 @@ describe('Landing Page UI', () => {
         fireEvent.click(abelianCheckbox);
 
         // Should show Z_2 (Abelian) 
-        expect(screen.getAllByText('Order: 2').length).toBeGreaterThan(0);
+        // Note: Z_2 is order 2 which is prime, so text is "Order 2 (prime)"
+        expect(screen.getAllByText(/Order 2/).length).toBeGreaterThan(0);
 
         // Should NOT show any "Non-Abelian" cards.
-        // The text "Non-Abelian" appears in the filter label, so we expect exactly 1 occurrence.
-        const nonAbelianTexts = screen.getAllByText('Non-Abelian');
-        expect(nonAbelianTexts).toHaveLength(1); // Only the label
+        // The text "Non-abelian" appears in the implication chain.
+        // We want to ensure no cards identify as "Non-abelian".
+        // The filter label (input) has text "Non-Abelian".
+        // The cards have "Non-abelian" (lowercase a).
+        // Let's check that the rendered text "Non-abelian" is NOT present in any card.
+        // Note: getAllByText might find the label if case insensitive.
+        // Helper:
+        const nonAbelianCards = screen.queryAllByText('Non-abelian');
+        expect(nonAbelianCards.length).toBe(0);
     });
 
     it('clears filters', () => {
@@ -89,13 +87,13 @@ describe('Landing Page UI', () => {
         fireEvent.change(input, { target: { value: 'NonExistentGroup' } });
 
         // Should show nothing
-        expect(screen.queryByText('Order: 1')).not.toBeInTheDocument();
+        expect(screen.queryByText(/Order 1/)).not.toBeInTheDocument();
 
         const clearBtn = screen.getByText('Clear');
         fireEvent.click(clearBtn);
 
         // Should show everything again
-        expect(screen.getByText('Order: 1')).toBeInTheDocument();
+        expect(screen.getAllByText(/Order 1/).length).toBeGreaterThan(0);
         expect(input).toHaveValue('');
     });
 
