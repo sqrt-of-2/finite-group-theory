@@ -10,7 +10,7 @@ import type { IGroup } from './types';
 // Z_n implementation using numbers
 export function createCn(n: number): ConcreteGroup<number> {
     return new ConcreteGroup<number>(
-        `Z_${n}`, `Z_${n}`,
+        `Z_${n}`, `Z_{${n}}`,
         [1], // Generator 1
         (a, b) => (a + b) % n,
         (a) => (n - a) % n,
@@ -26,7 +26,7 @@ export function createSn(n: number): ConcreteGroup<Permutation> {
     const cycle = Permutation.fromCycles(n, [Array.from({ length: n }, (_, i) => i + 1)]);
 
     return new ConcreteGroup<Permutation>(
-        `S_${n}`, `S_${n}`,
+        `S_${n}`, `S_{${n}}`,
         [transposition, cycle],
         (a, b) => a.multiply(b),
         (a) => a.inverse(),
@@ -79,7 +79,7 @@ export function createAn(n: number): ConcreteGroup<Permutation> {
     }
 
     return new ConcreteGroup<Permutation>(
-        `A_${n}`, `A_${n}`,
+        `A_${n}`, `A_{${n}}`,
         generators,
         (a, b) => a.multiply(b),
         (a) => a.inverse(),
@@ -306,7 +306,7 @@ export function createDic3(): ConcreteGroup<Permutation> {
     ]);
 
     return new ConcreteGroup<Permutation>(
-        'Dic_3', 'Dic_3',
+        'Dic_3', 'Dic_{3}',
         [a, x],
         (m, n) => m.multiply(n),
         (m) => m.inverse(),
