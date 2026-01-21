@@ -93,7 +93,7 @@ export const Landing: React.FC = () => {
             </section>
 
             <section style={{ margin: '2rem 0' }}>
-                <h3>Explore & Filter</h3>
+
                 <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                     <input
                         type="text"
