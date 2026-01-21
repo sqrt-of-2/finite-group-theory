@@ -5,7 +5,7 @@ import { Layout } from './components/Layout';
 import { Landing } from './pages/Landing';
 import { GroupPage } from './pages/GroupPage';
 import { GlossaryPage } from './pages/GlossaryPage';
-import { ComparePage } from './pages/ComparePage';
+
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
           <Route path="groups" element={<Landing />} />
           <Route path="group/:id" element={<GroupPage />} />
           <Route path="glossary" element={<GlossaryPage />} />
-          <Route path="compare" element={<ComparePage />} />
+
           <Route path="*" element={<div>Not found</div>} />
         </Route>
       </Routes>

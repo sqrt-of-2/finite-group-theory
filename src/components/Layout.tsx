@@ -20,9 +20,7 @@ export const Layout: React.FC = () => {
                     <div style={{ display: 'flex', gap: '1rem' }}>
                         <Link to="/groups">Catalog</Link>
                         <Link to="/glossary">Glossary</Link>
-                        {/* Simple link to compare for now, ideally user selects groups first. 
-                            We can link to a default compare like Z2 vs Z3? or empty. */}
-                        <Link to="/compare?g=Z_2&h=Z_3">Compare</Link>
+
                     </div>
                 </div>
             </nav>
