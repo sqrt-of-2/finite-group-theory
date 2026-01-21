@@ -69,9 +69,9 @@ describe('Landing Page UI', () => {
         // Note: Z_2 is order 2 which is prime, so text is "Order 2 (prime)"
         expect(screen.getAllByText(/Order 2/).length).toBeGreaterThan(0);
 
-        // Check for Implication Chain text (e.g. "Prime order ⇒ Cyclic ⇒ Abelian")
-        // Since matchers might partial match, checking "Cyclic ⇒ Abelian" should work for Z_2
-        expect(screen.getAllByText(/Cyclic ⇒ Abelian/).length).toBeGreaterThan(0);
+        // Check for Implication Chain text (e.g. "Prime order ⇒ cyclic ⇒ abelian")
+        // Since matchers might partial match, checking "Cyclic ⇒ abelian" should work for Z_2
+        expect(screen.getAllByText(/Cyclic ⇒ abelian/).length).toBeGreaterThan(0);
 
         // Should NOT show any "Non-Abelian" cards.
         // The text "Non-abelian" appears in the implication chain.
