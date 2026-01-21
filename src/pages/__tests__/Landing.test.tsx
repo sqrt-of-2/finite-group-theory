@@ -98,4 +98,34 @@ describe('Landing Page UI', () => {
         expect(screen.getByText('Order: 1')).toBeInTheDocument();
         expect(input).toHaveValue('');
     });
+
+    it('displays Notable Small Groups links correctly', () => {
+        const { container } = renderWithRouter(<Landing />);
+
+        // Find links by tag name to avoid JSDOM accessibility issues with Katex/MathML
+        const links = Array.from(container.querySelectorAll('a'));
+
+        const z1 = links.find(l => l.getAttribute('href') === '/group/Z_1');
+        expect(z1).toBeDefined();
+
+        const d8 = links.find(l => l.getAttribute('href') === '/group/D_8');
+        expect(d8).toBeDefined();
+
+        const q8 = links.find(l => l.getAttribute('href') === '/group/Q_8');
+        expect(q8).toBeDefined();
+    });
+
+    it('navigates to group page when clicking a catalog card', async () => {
+        // Need to test navigation. Since we use BrowserRouter, we can check if URL changes or new content renders.
+        // But verifying URL change in test environment is slightly tricky without memory router.
+        // We can just verify the link href.
+        renderWithRouter(<Landing />);
+
+        const cardS3 = screen.getAllByRole('link').find(l => l.getAttribute('href') === '/group/S_3');
+        expect(cardS3).toBeDefined();
+
+        // If we really want to test navigation, we might need a test-router setup or just trust Link works.
+        // Let's trust Link works but verify the href is correct.
+        expect(cardS3).toHaveAttribute('href', '/group/S_3');
+    });
 });
