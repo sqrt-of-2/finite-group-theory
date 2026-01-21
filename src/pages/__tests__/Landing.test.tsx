@@ -74,14 +74,10 @@ describe('Landing Page UI', () => {
         expect(screen.getAllByText(/Cyclic ⇒ abelian/).length).toBeGreaterThan(0);
 
         // Should NOT show any "Non-Abelian" cards.
-        // The text "Non-abelian" appears in the implication chain.
-        // We want to ensure no cards identify as "Non-abelian".
-        // The filter label (input) has text "Non-Abelian".
-        // The cards have "Non-abelian" (lowercase a).
-        // Let's check that the rendered text "Non-abelian" is NOT present in any card.
-        // Note: getAllByText might find the label if case insensitive.
-        // Helper:
-        const nonAbelianCards = screen.queryAllByText('Non-abelian');
+        // We ensure no cards identify as "Non-abelian".
+        const nonAbelianCards = screen.queryAllByText('Non-abelian').filter(el => {
+            return el.closest('.card') !== null;
+        });
         expect(nonAbelianCards.length).toBe(0);
     });
 

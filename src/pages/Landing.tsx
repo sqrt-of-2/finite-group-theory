@@ -32,6 +32,9 @@ export const Landing: React.FC = () => {
     const [filterAbelian, setFilterAbelian] = useState<boolean | null>(null);
     const [filterCyclic, setFilterCyclic] = useState<boolean | null>(null);
     const [filterSimple, setFilterSimple] = useState<boolean | null>(null);
+    const [filterPrime, setFilterPrime] = useState<boolean | null>(null);
+
+    const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59];
 
     const filtered = allGroups.filter(g => {
         const searchLower = search.toLowerCase();
@@ -45,6 +48,10 @@ export const Landing: React.FC = () => {
         if (filterAbelian !== null && g.props.isAbelian !== filterAbelian) return false;
         if (filterCyclic !== null && g.props.isCyclic !== filterCyclic) return false;
         if (filterSimple !== null && g.props.isSimple !== filterSimple) return false;
+        if (filterPrime !== null) {
+            const isPrime = primes.includes(g.props.order);
+            if (isPrime !== filterPrime) return false;
+        }
         return true;
     });
 
@@ -61,6 +68,7 @@ export const Landing: React.FC = () => {
 
     return (
         <div className="container">
+            {/* ... notableGroups section ... */}
             <section style={{ margin: '2rem 0' }}>
                 <ul className="dense-list">
                     {notableGroups.map((item: any) => (
@@ -95,13 +103,18 @@ export const Landing: React.FC = () => {
                         style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc' }}
                     />
 
-                    <label><input type="checkbox" checked={filterAbelian === true} onChange={() => setFilterAbelian(prev => prev === true ? null : true)} /> Abelian</label>
-                    <label><input type="checkbox" checked={filterAbelian === false} onChange={() => setFilterAbelian(prev => prev === false ? null : false)} /> Non-Abelian</label>
+                    {/* Filter Ordering: Prime, Cyclic, Non-cyclic, Abelian, Non-abelian, Simple */}
+                    <label><input type="checkbox" checked={filterPrime === true} onChange={() => setFilterPrime(prev => prev === true ? null : true)} /> Prime order</label>
 
                     <label><input type="checkbox" checked={filterCyclic === true} onChange={() => setFilterCyclic(prev => prev === true ? null : true)} /> Cyclic</label>
+                    <label><input type="checkbox" checked={filterCyclic === false} onChange={() => setFilterCyclic(prev => prev === false ? null : false)} /> Non-cyclic</label>
+
+                    <label><input type="checkbox" checked={filterAbelian === true} onChange={() => setFilterAbelian(prev => prev === true ? null : true)} /> Abelian</label>
+                    <label><input type="checkbox" checked={filterAbelian === false} onChange={() => setFilterAbelian(prev => prev === false ? null : false)} /> Non-abelian</label>
+
                     <label><input type="checkbox" checked={filterSimple === true} onChange={() => setFilterSimple(prev => prev === true ? null : true)} /> Simple</label>
 
-                    <button onClick={() => { setSearch(''); setFilterAbelian(null); setFilterCyclic(null); setFilterSimple(null); }} style={{ cursor: 'pointer' }}>
+                    <button onClick={() => { setSearch(''); setFilterAbelian(null); setFilterCyclic(null); setFilterSimple(null); setFilterPrime(null); }} style={{ cursor: 'pointer' }}>
                         Clear
                     </button>
                 </div>
@@ -115,18 +128,18 @@ export const Landing: React.FC = () => {
                             <div style={{ fontSize: '0.9rem', color: '#666', marginTop: '0.5rem' }}>
                                 <div>
                                     Order {g.props.order}
-                                    {([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59].includes(g.props.order)) ? ' (prime)' : ''}
+                                    {(primes.includes(g.props.order)) ? ' (prime)' : ''}
                                 </div>
                                 <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
                                     {(() => {
-                                        const isPrime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59].includes(g.props.order);
+                                        const isPrime = primes.includes(g.props.order);
                                         if (isPrime) return "Prime order ⇒ cyclic ⇒ abelian";
                                         if (g.props.isCyclic) return "Cyclic ⇒ abelian";
                                         if (g.props.isAbelian) return "Abelian";
                                         return "Non-abelian";
                                     })()}
                                 </div>
-                                {g.props.isSimple && !([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59].includes(g.props.order)) && (
+                                {g.props.isSimple && !(primes.includes(g.props.order)) && (
                                     <div style={{ color: 'green', marginTop: '0.2rem' }}>Simple</div>
                                 )}
                             </div>
