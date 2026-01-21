@@ -50,13 +50,13 @@ export const Landing: React.FC = () => {
 
     // Hardcoded list from requirements
     const notableGroups = [
-        { id: 'Z_1', desc: 'The smallest group (order 1)', tex: 'Z_1' },
-        { id: 'Z_2', desc: 'The smallest non-trivial group (order 2)', tex: 'Z_2' },
-        { id: 'Z_2_x_Z_2', desc: 'The smallest non-cyclic group (order 4)', tex: 'Z_2 \\times Z_2' },
-        { id: 'S_3', desc: 'The smallest non-abelian group (order 6)', tex: 'S_3' },
-        { id: 'D_8', desc: 'The smallest non-abelian p-groups (order 8)', tex: 'D_8, Q_8' },
-        { id: 'A_4', desc: 'The smallest group where the converse of Lagrange fails (order 12)', tex: 'A_4' },
-        { id: 'A_5', desc: 'The smallest non-abelian simple group (order 60)', tex: 'A_5' }
+        { id: 'Z_1', prefix: 'The smallest group', suffix: '(order 1)', tex: 'Z_1' },
+        { id: 'Z_2', prefix: 'The smallest non-trivial group', suffix: '(order 2)', tex: 'Z_2' },
+        { id: 'Z_2_x_Z_2', prefix: 'The smallest non-cyclic group', suffix: '(order 4)', tex: 'Z_2 \\times Z_2' },
+        { id: 'S_3', prefix: 'The smallest non-abelian group', suffix: '(order 6)', tex: 'S_3' },
+        { id: 'D_8', prefix: 'The smallest non-abelian p-groups', suffix: '(order 8)', tex: 'D_8, Q_8', plural: true },
+        { id: 'A_4', prefix: 'The smallest group where the converse of Lagrange fails', suffix: '(order 12)', tex: 'A_4' },
+        { id: 'A_5', prefix: 'The smallest non-abelian simple group', suffix: '(order 60)', tex: 'A_5' }
     ];
 
     return (
@@ -65,14 +65,12 @@ export const Landing: React.FC = () => {
                 <h2>Notable small groups</h2>
                 <ul className="dense-list">
                     {notableGroups.map(item => (
-                        <li key={item.id}>
+                        <li key={item.id} style={{ marginBottom: '0.5rem' }}>
+                            <span>{item.prefix} {item.plural ? 'are' : 'is'} </span>
                             <Link to={`/group/${item.id}`}>
-                                <span>The smallest ... is </span>
                                 <MathTex tex={item.tex} />
                             </Link>
-                            <span style={{ marginLeft: '1rem', color: '#666' }}>
-                                ({item.desc})
-                            </span>
+                            <span> {item.suffix}.</span>
                         </li>
                     ))}
                 </ul>
