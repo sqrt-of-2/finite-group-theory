@@ -119,8 +119,20 @@ describe('Landing Page UI', () => {
         expect(screen.getAllByText(/2 normal subgroups/).length).toBeGreaterThan(0);
 
         // S_3 has 3 normal subgroups ({e}, A_3, S_3)
-        // Let's find S_3 card specifically if possible, or just expect "3 normal subgroups" to exist
         expect(screen.getAllByText(/3 normal subgroups/).length).toBeGreaterThan(0);
+
+        // EXTRA CHECKS: Center and Conjugacy Classes
+        // Z_2 (abelian) center size 2 -> "2 elements lie"
+        expect(screen.getAllByText(/2 elements lie in the center/).length).toBeGreaterThan(0);
+
+        // S_3 center size 1 -> "1 element lies"
+        expect(screen.getAllByText(/1 element lies in the center/).length).toBeGreaterThan(0);
+
+        // S_3 has 3 conjugacy classes -> "3 conjugacy classes"
+        expect(screen.getAllByText(/3 conjugacy classes/).length).toBeGreaterThan(0);
+
+        // Z_1 has 1 conjugacy class
+        expect(screen.getAllByText(/1 conjugacy class/).length).toBeGreaterThan(0);
     });
 
     it('navigates to group page when clicking a catalog card', async () => {

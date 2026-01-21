@@ -140,13 +140,13 @@ export const Landing: React.FC = () => {
                                     })()}
                                 </div>
                                 <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
-                                    {g.normalCount} normal subgroups{g.normalCount === 2 ? ' ⇒ simple' : ''}
+                                    {g.normalCount} normal subgroup{g.normalCount === 1 ? '' : 's'}{g.normalCount === 2 ? ' ⇒ simple' : ''}
                                 </div>
                                 <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
-                                    {g.classCount} conjugacy classes
+                                    {g.classCount} conjugacy class{g.classCount === 1 ? '' : 'es'}
                                 </div>
                                 <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
-                                    {g.centerCount} elements lie in the center
+                                    {g.centerCount} element{g.centerCount === 1 ? '' : 's'} {g.centerCount === 1 ? 'lies' : 'lie'} in the center
                                 </div>
                             </div>
                         </Link>
