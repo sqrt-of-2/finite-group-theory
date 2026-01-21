@@ -1,73 +1,68 @@
-# React + TypeScript + Vite
+# Finite Group Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Finite Group Explorer** is an interactive educational tool designed to help students and enthusiasts explore the properties of finite groups. Built with **React** and **TypeScript**, it provides an intuitive interface for visualizing group structures, computing properties, and comparing different groups.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Comprehensive Group Catalog**: Explore all groups of order up to 12, plus the Alternating Group $A_5$ (Order 60).
+- **Interactive Cayley Tables**: Visualize group multiplication tables with interactive highlighting.
+- **Subgroup Lattices**: Graphical representation of the subgroup inclusion hierarchy.
+- **Deep Group Analysis**:
+    - Order, Abelian/Cyclic/Simple properties.
+    - Center and Conjugacy Classes.
+    - Generators and Relations.
+    - Full list of elements and subgroups.
+- **Quotient Groups**: Create and analyze quotient groups $G/N$ interactively.
+- **Compare Mode**: Side-by-side comparison of any two groups to spot isomorphisms or structural differences.
+- **Educational Glossary**: Integrated glossary of group theory terms with tooltip definitions.
 
-## React Compiler
+## Live Demo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+(Add your deployed link here if applicable)
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js (v18 or higher)
+- npm
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Installation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sqrt-of-2/finite-group-theory.git
+   cd finite-group-theory
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open your browser to `http://localhost:5173`.
+
+## Testing
+
+The project includes a comprehensive test suite using **Vitest**, covering core algebraic logic, group generators, and UI components.
+
+To run the tests:
+```bash
+npm run test
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Technologies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Frontend**: React, TypeScript, Vite
+- **Math Rendering**: KaTeX
+- **Testing**: Vitest, React Testing Library
+- **Styling**: CSS Modules / Plain CSS
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## License
+
+MIT
