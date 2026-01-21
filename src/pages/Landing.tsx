@@ -22,7 +22,9 @@ export const Landing: React.FC = () => {
                 id: group.id,
                 name: group.displayName,
                 props: group.getProperties(),
-                normalCount: group.getSubgroups().filter(s => s.isNormal).length
+                normalCount: group.getSubgroups().filter(s => s.isNormal).length,
+                classCount: group.conjugacyClasses().length,
+                centerCount: group.getProperties().center?.length || 0
             };
         }).filter(Boolean) as any[]; // TODO: proper type
     }, []);
@@ -139,6 +141,12 @@ export const Landing: React.FC = () => {
                                 </div>
                                 <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
                                     {g.normalCount} normal subgroups{g.normalCount === 2 ? ' ⇒ simple' : ''}
+                                </div>
+                                <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
+                                    {g.classCount} conjugacy classes
+                                </div>
+                                <div style={{ fontSize: '0.8rem', fontStyle: 'italic', marginTop: '0.2rem' }}>
+                                    {g.centerCount} elements lie in the center
                                 </div>
                             </div>
                         </Link>
