@@ -2,6 +2,7 @@
 // src/components/Layout.tsx
 import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { registry } from '../engine/registry';
 
 import { MathTex } from './MathTex';
 
@@ -30,10 +31,13 @@ export const Layout: React.FC = () => {
             <div className="container" style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
                 {parts.length > 0 && <Link to="/">Home</Link>}
                 {parts.map((p, i) => {
-                    const isMath = p.includes('_') || p.includes('^') || p.match(/[0-9]/);
+                    const group = registry.get(p);
+                    const label = group ? group.displayName : p;
+                    const isMath = group || p.includes('_') || p.includes('^') || p.match(/[0-9]/);
+
                     return (
-                        <span key={i}> &gt; <span style={{ textTransform: 'capitalize' }}>
-                            {isMath ? <MathTex tex={p} inline /> : p}
+                        <span key={i}> &gt; <span style={{ textTransform: isMath ? 'none' : 'capitalize' }}>
+                            {isMath ? <MathTex tex={label} inline /> : label}
                         </span></span>
                     );
                 })}
