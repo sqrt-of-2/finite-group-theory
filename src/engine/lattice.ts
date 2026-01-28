@@ -86,17 +86,14 @@ export function calculateLattice(subgroups: Subgroup[]): LatticeGraph {
     }
 
     // 4. Layers
-    // User Request: Group by Order strictly.
-    // "subgroups of larger order are positioned higher"
     const layers = new Map<number, number[]>();
-    // Since 'sorted' is already sorted by order, we can trust the order of keys if we insert in order.
     for (let i = 0; i < sorted.length; i++) {
-        const ord = sorted[i].order;
-        if (!layers.has(ord)) layers.set(ord, []);
-        layers.get(ord)!.push(i);
+        const r = ranks.get(i)!;
+        if (!layers.has(r)) layers.set(r, []);
+        layers.get(r)!.push(i);
     }
 
-    // Return structure with nodes having the computed logical rank and ID
+    // Return structure with nodes having the computed rank and ID
     const nodes: LatticeNode[] = sorted.map((s, i) => ({
         ...s,
         id: s.originalIndex, // Preserve original ID for UI keys

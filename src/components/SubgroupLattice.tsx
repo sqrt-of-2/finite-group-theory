@@ -60,6 +60,7 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
     const groupOrder = group.getProperties().order;
 
     // Use Engine Logic
+    // calculateLattice returns layers based on RANK (topological)
     const { nodes: latticeNodes, links: latticeLinks, layers } = useMemo(() => {
         return calculateLattice(subgroups);
     }, [subgroups]);
@@ -71,17 +72,35 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
         const height = 400;
         const padding = 60;
 
+        // Gather all unique orders for Y-positioning
+        // We want strict Order-based stratification for Y position
+        const uniqueOrders = Array.from(new Set(subgroups.map(s => s.order))).sort((a, b) => a - b);
+        const orderCount = uniqueOrders.length;
+
+        // Helper to get Y based on order
+        const getY = (order: number) => {
+            if (orderCount <= 1) return height / 2;
+            const idx = uniqueOrders.indexOf(order);
+            // Height mapping: Smallest order (0-index) at Bottom (height - padding)
+            // Largest order (max-index) at Top (padding)
+            return height - padding - (idx / (orderCount - 1)) * (height - 2 * padding);
+        };
+
         const nodePositions = new Map<number, { x: number, y: number }>();
         const layerCount = layerKeys.length;
 
+        // X-positions determined by Rank-based layers (to maintain horizontal separation of incomparable subgroups)
         layerKeys.forEach((rank) => {
             const indices = layers.get(rank)!;
-            const cy = layerCount > 1
-                ? height - padding - (rank / (layerCount - 1)) * (height - 2 * padding)
-                : height / 2;
 
             indices.forEach((idx, i) => {
                 const cx = (width * (i + 1)) / (indices.length + 1);
+
+                // Decouple Y from Rank. Use Order!
+                // latticeNodes matches sorted array from calculateLattice
+                const node = latticeNodes[idx];
+                const cy = getY(node.order);
+
                 nodePositions.set(idx, { x: cx, y: cy });
             });
         });
@@ -96,7 +115,7 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
             nodes: uiNodes,
             links: latticeLinks
         };
-    }, [latticeNodes, latticeLinks, layers]);
+    }, [latticeNodes, latticeLinks, layers, subgroups]);
 
     // Tooltip State
     const [hoverNode, setHoverNode] = useState<any | null>(null);
@@ -132,7 +151,6 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
         if (!hoverNode) return null;
 
         const node = hoverNode;
-        // Note: node is LatticeNode & position. It has Subgroup props.
         const name = node.name || (node.order === 1 ? '\\{e\\}' : (node.order === groupOrder ? 'G' : `H_{${node.id}}`));
         const groupName = group.displayName;
         const elementsList = Array.from(node.elements).map((e: any) => group.elements.find(x => x.id === e)?.label || e).join(', ');
