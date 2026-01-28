@@ -3,6 +3,8 @@
 import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
+import { MathTex } from './MathTex';
+
 export const Layout: React.FC = () => {
     const location = useLocation();
 
@@ -27,9 +29,14 @@ export const Layout: React.FC = () => {
 
             <div className="container" style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
                 {parts.length > 0 && <Link to="/">Home</Link>}
-                {parts.map((p, i) => (
-                    <span key={i}> &gt; <span style={{ textTransform: 'capitalize' }}>{p}</span></span>
-                ))}
+                {parts.map((p, i) => {
+                    const isMath = p.includes('_') || p.includes('^') || p.match(/[0-9]/);
+                    return (
+                        <span key={i}> &gt; <span style={{ textTransform: 'capitalize' }}>
+                            {isMath ? <MathTex tex={p} inline /> : p}
+                        </span></span>
+                    );
+                })}
             </div>
 
             <main>

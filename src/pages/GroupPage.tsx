@@ -45,7 +45,7 @@ export const GroupPage: React.FC = () => {
     return (
         <div className="container group-page-layout">
             <aside className="toc">
-                <h3>{group.displayName}</h3>
+                <h3><MathTex tex={group.displayName} /></h3>
                 <ul className="dense-list">
                     <li><a href="#facts">Quick Facts</a></li>
                     <li><a href="#cayley">Cayley Table</a></li>
