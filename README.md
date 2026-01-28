@@ -4,10 +4,6 @@
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js (v18 or higher)
-- npm
 
 ### Installation
 
