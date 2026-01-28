@@ -17,7 +17,7 @@ export const Layout: React.FC = () => {
             <nav className="container navbar">
                 <div className="navbar-content">
                     <Link to="/" className="brand">
-                        Notable Small Groups
+                        Notable small groups
                     </Link>
                     <div style={{ display: 'flex', gap: '1rem' }}>
                         <Link to="/groups">Catalog</Link>

@@ -37,11 +37,11 @@ export const glossaryTerms: Record<string, GlossaryTerm> = {
         definition: 'A subset of a group that is itself a group under the same operation.',
     },
     'normal': {
-        term: 'Normal Subgroup',
+        term: 'Normal subgroup',
         definition: 'A subgroup N is normal if gNg^-1 = N for all g in G. Only normal subgroups can be used to form quotient groups.',
     },
     'quotient': {
-        term: 'Quotient Group',
+        term: 'Quotient group',
         definition: 'The group formulated by the set of cosets of a normal subgroup N, denoted G/N.',
     },
     'centralizer': {
@@ -49,7 +49,7 @@ export const glossaryTerms: Record<string, GlossaryTerm> = {
         definition: 'The complex of elements that commute with a specific element x, denoted C_G(x).',
     },
     'conjugacy class': {
-        term: 'Conjugacy Class',
+        term: 'Conjugacy class',
         definition: 'The set of elements { gxg^-1 | g in G } for a given element x.',
     }
     // Add more as needed

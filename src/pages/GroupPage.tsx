@@ -47,8 +47,8 @@ export const GroupPage: React.FC = () => {
             <aside className="toc">
                 <h3><MathTex tex={group.displayName} /></h3>
                 <ul className="dense-list">
-                    <li><a href="#facts">Quick Facts</a></li>
-                    <li><a href="#cayley">Cayley Table</a></li>
+                    <li><a href="#facts">Quick facts</a></li>
+                    <li><a href="#cayley">Cayley table</a></li>
                     <li><a href="#subgroups">Subgroups</a></li>
                     <li><a href="#quotients">Quotients</a></li>
                     <li><a href="#elements">Elements</a></li>
@@ -76,12 +76,12 @@ export const GroupPage: React.FC = () => {
                         <li><strong><GlossaryLink termKey="cyclic" capitalize>Cyclic</GlossaryLink>?</strong> {props.isCyclic ? 'Yes' : 'No'}</li>
                         <li><strong><GlossaryLink termKey="abelian" capitalize>Abelian</GlossaryLink>?</strong> {props.isAbelian ? 'Yes' : 'No'}</li>
                         <li><strong><GlossaryLink termKey="simple" capitalize>Simple</GlossaryLink>?</strong> {props.isSimple ? 'Yes' : 'No'}</li>
-                        <li><strong><GlossaryLink termKey="conjugacy class" capitalize>Conjugacy Classes</GlossaryLink>:</strong> {classes.length}</li>
+                        <li><strong><GlossaryLink termKey="conjugacy class" capitalize>Conjugacy classes</GlossaryLink>:</strong> {classes.length}</li>
                     </ul>
                 </section>
 
                 <section id="subgroups" className="section">
-                    <h2>Subgroup Lattice</h2>
+                    <h2>Subgroup lattice</h2>
                     <SubgroupLattice subgroups={subgroups} group={group} />
                 </section>
 
@@ -93,7 +93,7 @@ export const GroupPage: React.FC = () => {
                             <tr style={{ textAlign: 'left', borderBottom: '1px solid #eee' }}>
                                 <th>Subgroup</th>
                                 <th>Order</th>
-                                <th>Index (Quotient Order)</th>
+                                <th>Index (quotient order)</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -121,7 +121,7 @@ export const GroupPage: React.FC = () => {
                 </section>
 
                 <section id="cayley" className="section">
-                    <h2>Cayley Table</h2>
+                    <h2>Cayley table</h2>
                     <p style={{ fontSize: '0.9rem', color: 'gray' }}>Colored by conjugacy class</p>
                     <div style={{ overflowX: 'auto' }}>
                         <table className="cayley-table">

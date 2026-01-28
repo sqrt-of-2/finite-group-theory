@@ -97,7 +97,7 @@ describe('Landing Page UI', () => {
         expect(input).toHaveValue('');
     });
 
-    it('displays Notable Small Groups links correctly', () => {
+    it('displays Notable small groups links correctly', () => {
         const { container } = renderWithRouter(<Landing />);
 
         // Find links by tag name to avoid JSDOM accessibility issues with Katex/MathML
