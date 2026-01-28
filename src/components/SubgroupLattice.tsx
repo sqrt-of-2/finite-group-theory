@@ -178,7 +178,7 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
         if (!hoverNode) return null;
 
         const node = hoverNode as Subgroup & { id: number }; // cast
-        const name = node.name || (node.order === 1 ? '\\{e\\}' : (node.order === groupOrder ? 'G' : `H_{${node.id}}`));
+        const name = node.name || (node.order === 1 ? '\\{e\\}' : (node.order === groupOrder ? `G = ${group.displayName}` : `H_{${node.id}}`));
         const groupName = group.displayName;
         const elementsList = Array.from(node.elements).map(e => group.elements.find(x => x.id === e)?.label || e).join(', ');
         const index = groupOrder / node.order;
@@ -250,7 +250,7 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
                         <foreignObject x="-20" y="-30" width="40" height="20">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%', pointerEvents: 'none' }}>
                                 <span style={{ fontSize: '10px', color: '#666' }}>
-                                    <MathTex tex={node.name || (node.order === 1 ? '\\{e\\}' : (node.order === groupOrder ? 'G' : `H_{${node.id}}`))} />
+                                    <MathTex tex={node.name || (node.order === 1 ? '\\{e\\}' : (node.order === groupOrder ? `G = ${group.displayName}` : `H_{${node.id}}`))} />
                                 </span>
                             </div>
                         </foreignObject>
