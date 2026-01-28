@@ -15,15 +15,12 @@ describe('SubgroupLattice', () => {
 
         render(<SubgroupLattice group={group} subgroups={subgroups} />);
 
-        // Should find "e" or subgroup representation
+        // Should find "{e}" or subgroup representation
         const labels = screen.getAllByTestId('math-tex');
         expect(labels.length).toBeGreaterThan(0);
-        // Expect 'e' or 'G' or 'Z_1' depending on exact logic.
-        // Z_1 displayName is 'Z_1'. node.name might be empty?
-        // Logic: node.name || (node.order === 1 ? 'e' : (node.order === groupOrder ? 'G' : `H_{${node.id}}`))
-        // For Z_1, order 1 is groupOrder. Order 1 text is 'e'. Priority to 'e'.
+        // Expect '\{e\}'
         const texts = labels.map(l => l.textContent);
-        expect(texts).toContain('e');
+        expect(texts).toContain('\\{e\\}');
     });
 
     it('renders correct labels for subgroups', () => {
@@ -34,10 +31,10 @@ describe('SubgroupLattice', () => {
 
         const labels = screen.getAllByTestId('math-tex');
         // We expect matching content. 
-        // e (order 1)
+        // \{e\} (order 1)
         // G (order 2)
         const texts = labels.map(l => l.textContent);
-        expect(texts).toContain('e');
+        expect(texts).toContain('\\{e\\}');
         expect(texts).toContain('G');
     });
 
