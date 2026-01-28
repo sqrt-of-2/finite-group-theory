@@ -113,6 +113,23 @@ export const GroupPage: React.FC = () => {
                                                 style={{ cursor: 'pointer', padding: '2px 8px' }}
                                             >
                                                 Explore <MathTex tex={`${group.displayName} / ${subName}`} inline />
+                                                {(() => {
+                                                    const qOrder = props.order / sub.order;
+                                                    // Attempt to identify quotient
+                                                    try {
+                                                        const Q = createQuotientGroup(group, sub);
+                                                        const iso = registry.findIsomorphism(Q);
+                                                        return (
+                                                            <>
+                                                                {' of order '}
+                                                                {qOrder}
+                                                                {iso ? <span> (isomorphic to <MathTex tex={iso.displayName} inline />)</span> : ''}
+                                                            </>
+                                                        );
+                                                    } catch (e) {
+                                                        return ` of order ${qOrder}`;
+                                                    }
+                                                })()}
                                             </button>
                                         </td>
                                     </tr>

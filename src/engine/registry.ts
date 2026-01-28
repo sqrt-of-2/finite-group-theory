@@ -2,6 +2,7 @@
 // src/engine/registry.ts
 import type { IGroup } from './types';
 // ... imports
+import { areGroupsIsomorphic } from './isomorphism';
 import { createCn, createSn, createDn, createKlein4, createAn, createQ8, createDirectProduct, createDic3 } from './factory';
 
 class GroupRegistry {
@@ -27,9 +28,24 @@ class GroupRegistry {
     }
 
     getCatalog(): { id: string, name: string }[] {
-        // This requires knowing names without loading? 
-        // For now hardcode or use loaders keys.
-        return Object.keys(this.loaders).map(id => ({ id, name: id })); // Minimal
+        return Object.keys(this.loaders).map(id => ({ id, name: id }));
+    }
+
+    findIsomorphism(target: IGroup): IGroup | null {
+        // Only check identifying properties first to avoid loading everything
+        const targetProps = target.getProperties();
+
+        for (const id of Object.keys(this.loaders)) {
+            // Optimization: Maybe we can check metadata before loading? 
+            // For now, load everything (small catalog).
+            const candidate = this.get(id);
+            if (!candidate) continue;
+
+            if (areGroupsIsomorphic(target, candidate)) {
+                return candidate;
+            }
+        }
+        return null;
     }
 }
 
