@@ -101,8 +101,7 @@ export const GroupPage: React.FC = () => {
                             {normalSubgroups.map((sub, i) => (
                                 <tr key={i} style={{ borderBottom: '1px solid #eee', height: '2.5rem' }}>
                                     <td>
-                                        {/* Identify generic name */}
-                                        {sub.order === 1 ? '{e}' : (sub.order === props.order ? group.displayName : `H_${subgroups.indexOf(sub)}`)}
+                                        <MathTex tex={sub.order === 1 ? '\\{e\\}' : (sub.order === props.order ? group.displayName : `H_{${subgroups.indexOf(sub)}}`)} />
                                     </td>
                                     <td>{sub.order}</td>
                                     <td>{props.order / sub.order}</td>
