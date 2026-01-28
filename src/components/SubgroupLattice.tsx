@@ -1,23 +1,15 @@
 
-// src/components/SubgroupLattice.tsx
 import React, { useMemo, useState, useRef } from 'react';
 import type { Subgroup, IGroup } from '../engine/types';
 import { MathTex } from './MathTex';
+import { calculateLattice } from '../engine/lattice';
 
 interface SubgroupLatticeProps {
     subgroups: Subgroup[];
     group: IGroup;
 }
 
-// Logic Helpers
-const isSubset = (a: Set<string>, b: Set<string>) => {
-    if (a.size > b.size) return false;
-    for (const x of a) {
-        if (!b.has(x)) return false;
-    }
-    return true;
-};
-
+// Logic Helpers for Tooltips
 const getCore = (group: IGroup, sub: Subgroup): Set<string> => {
     if (sub.isNormal) return sub.elements;
     let core = new Set(sub.elements);
@@ -37,11 +29,6 @@ const getCore = (group: IGroup, sub: Subgroup): Set<string> => {
 
 const isCyclic = (group: IGroup, sub: Subgroup): boolean => {
     const subOrder = sub.order;
-    // Check if any element has order equal to subOrder
-    // We need element orders. We can compute them or assume group.elements handles it.
-    // group.elements might cache them but here we deal with IDs.
-    // We can rely on `ConcreteGroup` which probably cached them on `elements` list.
-    // Or just recompute quickly.
     const identity = group.getIdentity();
     for (const h of sub.elements) {
         let curr = h;
@@ -50,9 +37,6 @@ const isCyclic = (group: IGroup, sub: Subgroup): boolean => {
             curr = group.multiply(curr, h);
             ord++;
         }
-        // If we wrapped around to identity at exactly subOrder, it generates the group
-        // But valid order check is: h^ord = e. Smallest positive ord.
-        // My loop finds the order.
         if (ord === subOrder) return true;
     }
     return false;
@@ -60,7 +44,6 @@ const isCyclic = (group: IGroup, sub: Subgroup): boolean => {
 
 const isAbelian = (group: IGroup, sub: Subgroup): boolean => {
     const elems = Array.from(sub.elements);
-    // Standard check
     for (let i = 0; i < elems.length; i++) {
         for (let j = i + 1; j < elems.length; j++) {
             if (group.multiply(elems[i], elems[j]) !== group.multiply(elems[j], elems[i])) return false;
@@ -70,57 +53,20 @@ const isAbelian = (group: IGroup, sub: Subgroup): boolean => {
 };
 
 const getPrimes = () => {
-    const primes = new Set([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61]); // simplified
-    return primes;
+    return new Set([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61]);
 };
 
 export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, group }) => {
     const groupOrder = group.getProperties().order;
+
+    // Use Engine Logic
+    const { nodes: latticeNodes, links: latticeLinks, layers } = useMemo(() => {
+        return calculateLattice(subgroups);
+    }, [subgroups]);
+
+    // Layout Logic
     const { nodes, links } = useMemo(() => {
-        // 1. Sort subgroups by order
-        const sorted = [...subgroups].sort((a, b) => a.order - b.order);
-
-        // 2. Compute Rank (Height) for layout
-        // Rank(S) = max(Rank(sub)) + 1 for all proper subgroups sub < S
-        // Since sorted by order, we can compute dynamically.
-        const ranks = new Map<number, number>(); // index -> rank
-        const maxRankByOrder = new Map<number, number>(); // order -> max rank seen (optimization?)
-
-        // Initialize
-        ranks.set(0, 0); // sorted[0] is {e}, rank 0.
-        let maxRank = 0;
-
-        for (let i = 1; i < sorted.length; i++) {
-            const S = sorted[i];
-            let r = 0;
-            // Find max rank of proper subgroups
-            // Since sorted[j] has order <= sorted[i], we only check j < i
-            for (let j = 0; j < i; j++) {
-                const sub = sorted[j];
-                // Check if sub is subset of S
-                if (S.order % sub.order === 0 && S.order !== sub.order) { // Divisibility check first
-                    if (isSubset(sub.elements, S.elements)) {
-                        const subRank = ranks.get(j)!;
-                        if (subRank + 1 > r) r = subRank + 1;
-                    }
-                }
-            }
-            ranks.set(i, r);
-            if (r > maxRank) maxRank = r;
-        }
-
-        // Group by Rank
-        const layers = new Map<number, number[]>();
-        for (let i = 0; i < sorted.length; i++) {
-            const r = ranks.get(i)!;
-            if (!layers.has(r)) layers.set(r, []);
-            layers.get(r)!.push(i);
-        }
-
-        // Layer keys are 0..maxRank
         const layerKeys = Array.from(layers.keys()).sort((a, b) => a - b);
-
-        // Compute positions
         const width = 600;
         const height = 400;
         const padding = 60;
@@ -130,8 +76,6 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
 
         layerKeys.forEach((rank) => {
             const indices = layers.get(rank)!;
-            // Rank 0 is bottom, MaxRank is top.
-            // y goes from height-padding to padding.
             const cy = layerCount > 1
                 ? height - padding - (rank / (layerCount - 1)) * (height - 2 * padding)
                 : height / 2;
@@ -142,40 +86,17 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
             });
         });
 
-        // Edges: Transitive reduction
-        const edges: [number, number][] = [];
-
-        for (let i = 0; i < sorted.length; i++) {
-            for (let j = i + 1; j < sorted.length; j++) {
-                const subA = sorted[i];
-                const subB = sorted[j];
-
-                if (subB.order % subA.order !== 0) continue;
-
-                if (isSubset(subA.elements, subB.elements)) {
-                    let direct = true;
-                    for (let k = i + 1; k < j; k++) {
-                        const subK = sorted[k];
-                        if (subK.order === subA.order || subK.order === subB.order) continue;
-                        if (subK.order % subA.order === 0 && subB.order % subK.order === 0) {
-                            if (isSubset(subA.elements, subK.elements) && isSubset(subK.elements, subB.elements)) {
-                                direct = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (direct) {
-                        edges.push([i, j]);
-                    }
-                }
-            }
-        }
+        // Map latticeNodes (which already contain 'rank' and 'originalIndex') to UI nodes
+        const uiNodes = latticeNodes.map((node, i) => ({
+            ...node,
+            ...nodePositions.get(i)!
+        }));
 
         return {
-            nodes: sorted.map((s, i) => ({ ...s, ...nodePositions.get(i)!, id: subgroups.indexOf(s) })),
-            links: edges
+            nodes: uiNodes,
+            links: latticeLinks
         };
-    }, [subgroups, groupOrder]);
+    }, [latticeNodes, latticeLinks, layers]);
 
     // Tooltip State
     const [hoverNode, setHoverNode] = useState<any | null>(null);
@@ -207,18 +128,17 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
         setHoverNode(null);
     };
 
-    // Render logic for tooltip content
     const renderTooltip = () => {
         if (!hoverNode) return null;
 
-        const node = hoverNode as Subgroup & { id: number }; // cast
+        const node = hoverNode;
+        // Note: node is LatticeNode & position. It has Subgroup props.
         const name = node.name || (node.order === 1 ? '\\{e\\}' : (node.order === groupOrder ? 'G' : `H_{${node.id}}`));
         const groupName = group.displayName;
-        const elementsList = Array.from(node.elements).map(e => group.elements.find(x => x.id === e)?.label || e).join(', ');
+        const elementsList = Array.from(node.elements).map((e: any) => group.elements.find(x => x.id === e)?.label || e).join(', ');
         const index = groupOrder / node.order;
         const isNorm = node.isNormal;
 
-        // Compute properties on fly
         const isCyc = isCyclic(group, node);
         const isAb = isAbelian(group, node);
         const coreSet = getCore(group, node);
@@ -227,7 +147,6 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
         const primes = getPrimes();
         const isPrime = primes.has(node.order);
 
-        // Styling for tooltip
         return (
             <div style={{
                 position: 'absolute',
@@ -281,7 +200,6 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
                             stroke="#0044cc"
                             strokeWidth={node.isNormal ? 2 : 1}
                         />
-                        {/* Increased dimensions to avoid clipping textual labels like G = Z_12 */}
                         <foreignObject x="-60" y="-35" width="120" height="30">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%', pointerEvents: 'none' }}>
                                 <span style={{ fontSize: '10px', color: '#666', whiteSpace: 'nowrap' }}>
@@ -297,7 +215,6 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
     );
 };
 
-// Component to draw links
 const SlightlyCurvedLinks = ({ links, nodes }: { links: [number, number][], nodes: any[] }) => {
     return (
         <>
