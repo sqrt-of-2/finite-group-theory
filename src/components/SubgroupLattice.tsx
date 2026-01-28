@@ -80,26 +80,60 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
         // 1. Sort subgroups by order
         const sorted = [...subgroups].sort((a, b) => a.order - b.order);
 
-        // Layers: map order -> list of indices
-        const layers = new Map<number, number[]>();
-        sorted.forEach((sub, i) => {
-            if (!layers.has(sub.order)) layers.set(sub.order, []);
-            layers.get(sub.order)!.push(i);
-        });
+        // 2. Compute Rank (Height) for layout
+        // Rank(S) = max(Rank(sub)) + 1 for all proper subgroups sub < S
+        // Since sorted by order, we can compute dynamically.
+        const ranks = new Map<number, number>(); // index -> rank
+        const maxRankByOrder = new Map<number, number>(); // order -> max rank seen (optimization?)
 
-        const layerOrders = Array.from(layers.keys()).sort((a, b) => a - b);
+        // Initialize
+        ranks.set(0, 0); // sorted[0] is {e}, rank 0.
+        let maxRank = 0;
+
+        for (let i = 1; i < sorted.length; i++) {
+            const S = sorted[i];
+            let r = 0;
+            // Find max rank of proper subgroups
+            // Since sorted[j] has order <= sorted[i], we only check j < i
+            for (let j = 0; j < i; j++) {
+                const sub = sorted[j];
+                // Check if sub is subset of S
+                if (S.order % sub.order === 0 && S.order !== sub.order) { // Divisibility check first
+                    if (isSubset(sub.elements, S.elements)) {
+                        const subRank = ranks.get(j)!;
+                        if (subRank + 1 > r) r = subRank + 1;
+                    }
+                }
+            }
+            ranks.set(i, r);
+            if (r > maxRank) maxRank = r;
+        }
+
+        // Group by Rank
+        const layers = new Map<number, number[]>();
+        for (let i = 0; i < sorted.length; i++) {
+            const r = ranks.get(i)!;
+            if (!layers.has(r)) layers.set(r, []);
+            layers.get(r)!.push(i);
+        }
+
+        // Layer keys are 0..maxRank
+        const layerKeys = Array.from(layers.keys()).sort((a, b) => a - b);
 
         // Compute positions
         const width = 600;
         const height = 400;
-        const padding = 60; // Increased from 50 to allow room for labels
+        const padding = 60;
 
         const nodePositions = new Map<number, { x: number, y: number }>();
+        const layerCount = layerKeys.length;
 
-        layerOrders.forEach((ord, layerIdx) => {
-            const indices = layers.get(ord)!;
-            const cy = layerOrders.length > 1
-                ? height - padding - (layerIdx / (layerOrders.length - 1)) * (height - 2 * padding)
+        layerKeys.forEach((rank) => {
+            const indices = layers.get(rank)!;
+            // Rank 0 is bottom, MaxRank is top.
+            // y goes from height-padding to padding.
+            const cy = layerCount > 1
+                ? height - padding - (rank / (layerCount - 1)) * (height - 2 * padding)
                 : height / 2;
 
             indices.forEach((idx, i) => {
