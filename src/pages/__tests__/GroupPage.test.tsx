@@ -33,8 +33,6 @@ describe('GroupPage', () => {
         renderGroupPage();
         await waitFor(() => expect(screen.queryByText(/Loading/)).not.toBeInTheDocument());
 
-        // Use regex for case sensitive check or exact strings
-        // "Quotients" appears multiple times, so getAllByText
         expect(screen.getAllByText('Quick facts').length).toBeGreaterThan(0);
         expect(screen.getAllByText('Cayley table').length).toBeGreaterThan(0);
         expect(screen.getAllByText('Subgroup lattice').length).toBeGreaterThan(0);
@@ -46,7 +44,6 @@ describe('GroupPage', () => {
         renderGroupPage();
         await waitFor(() => expect(screen.queryByText(/Loading/)).not.toBeInTheDocument());
 
-        // "Quotients" appears in TOC and Header. Find the one that matches H2
         const headings = screen.getAllByRole('heading', { level: 2 });
         const quotientsHeader = headings.find(h => h.textContent === 'Quotients');
         expect(quotientsHeader).toBeInTheDocument();
@@ -54,13 +51,33 @@ describe('GroupPage', () => {
         const quotientsSection = quotientsHeader!.closest('section');
         expect(quotientsSection).toBeInTheDocument();
 
-        // Within quotients table, check for MathTex elements
-        // Z_2 row: {e} -> index 2, Z_2 -> index 1
         const mathElems = within(quotientsSection!).getAllByTestId('math-tex');
         const contents = mathElems.map(e => e.textContent);
 
         expect(contents).toContain('\\{e\\}');
         expect(contents).toContain('Z_{2}');
+    });
+
+    it('renders Explore buttons with specific group/subgroup names', async () => {
+        renderGroupPage();
+        await waitFor(() => expect(screen.queryByText(/Loading/)).not.toBeInTheDocument());
+
+        const headings = screen.getAllByRole('heading', { level: 2 });
+        const quotientsHeader = headings.find(h => h.textContent === 'Quotients');
+        const quotientsSection = quotientsHeader!.closest('section');
+
+        // Find buttons in quotients section
+        const buttons = within(quotientsSection!).getAllByRole('button');
+
+        // Z_2 quotients: 
+        // 1. Z_2 / {e}  -> Explore Z_{2} / \{e\}
+        // 2. Z_2 / Z_2  -> Explore Z_{2} / Z_{2}
+
+        // We look for MathTex inside buttons
+        const buttonMath = buttons.map(b => within(b).getByTestId('math-tex').textContent);
+
+        expect(buttonMath).toContain('Z_{2} / \\{e\\}');
+        expect(buttonMath).toContain('Z_{2} / Z_{2}');
     });
 
     it('displays Quotients table headers correctly', async () => {
@@ -73,9 +90,6 @@ describe('GroupPage', () => {
     it('renders sidebar title with MathTex', async () => {
         renderGroupPage();
         await waitFor(() => expect(screen.queryByText(/Loading/)).not.toBeInTheDocument());
-
-        // Check for Z_{2} in sidebar
-        // There are multiple Z_{2}: H1, Sidebar, Quotients, etc.
         const math = screen.getAllByTestId('math-tex');
         const z2 = math.filter(m => m.textContent === 'Z_{2}');
         expect(z2.length).toBeGreaterThan(1);

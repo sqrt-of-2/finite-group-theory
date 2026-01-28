@@ -98,23 +98,26 @@ export const GroupPage: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {normalSubgroups.map((sub, i) => (
-                                <tr key={i} style={{ borderBottom: '1px solid #eee', height: '2.5rem' }}>
-                                    <td>
-                                        <MathTex tex={sub.order === 1 ? '\\{e\\}' : (sub.order === props.order ? group.displayName : `H_{${subgroups.indexOf(sub)}}`)} />
-                                    </td>
-                                    <td>{sub.order}</td>
-                                    <td>{props.order / sub.order}</td>
-                                    <td>
-                                        <button
-                                            onClick={() => handleExploreQuotient(sub, subgroups.indexOf(sub))}
-                                            style={{ cursor: 'pointer', padding: '2px 8px' }}
-                                        >
-                                            Explore G/N
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
+                            {normalSubgroups.map((sub, i) => {
+                                const subName = sub.order === 1 ? '\\{e\\}' : (sub.order === props.order ? group.displayName : `H_{${subgroups.indexOf(sub)}}`);
+                                return (
+                                    <tr key={i} style={{ borderBottom: '1px solid #eee', height: '2.5rem' }}>
+                                        <td>
+                                            <MathTex tex={subName} />
+                                        </td>
+                                        <td>{sub.order}</td>
+                                        <td>{props.order / sub.order}</td>
+                                        <td>
+                                            <button
+                                                onClick={() => handleExploreQuotient(sub, subgroups.indexOf(sub))}
+                                                style={{ cursor: 'pointer', padding: '2px 8px' }}
+                                            >
+                                                Explore <MathTex tex={`${group.displayName} / ${subName}`} inline />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </section>
