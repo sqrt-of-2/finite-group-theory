@@ -138,7 +138,7 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
         }
 
         return {
-            nodes: sorted.map((s, i) => ({ ...s, ...nodePositions.get(i)!, id: i })),
+            nodes: sorted.map((s, i) => ({ ...s, ...nodePositions.get(i)!, id: subgroups.indexOf(s) })),
             links: edges
         };
     }, [subgroups, groupOrder]);
