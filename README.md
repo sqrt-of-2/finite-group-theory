@@ -1,6 +1,6 @@
 # Finite Group Explorer
 
-**Finite Group Explorer** is a tool to explore the properties of finite groups. Built with **React** and **TypeScript**, it visualizes group structures and computes properties.
+**Finite Group Explorer** is a tool to explore the properties of finite groups. It visualizes group structures and computes properties.
 
 ## Getting Started
 
