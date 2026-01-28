@@ -178,7 +178,7 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
         if (!hoverNode) return null;
 
         const node = hoverNode as Subgroup & { id: number }; // cast
-        const name = node.name || (node.order === 1 ? '\\{e\\}' : (node.order === groupOrder ? `G = ${group.displayName}` : `H_{${node.id}}`));
+        const name = node.name || (node.order === 1 ? '\\{e\\}' : (node.order === groupOrder ? 'G' : `H_{${node.id}}`));
         const groupName = group.displayName;
         const elementsList = Array.from(node.elements).map(e => group.elements.find(x => x.id === e)?.label || e).join(', ');
         const index = groupOrder / node.order;
