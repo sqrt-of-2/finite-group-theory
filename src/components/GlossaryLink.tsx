@@ -27,7 +27,7 @@ export const GlossaryLink: React.FC<GlossaryLinkProps> = ({ termKey, children, c
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
         >
-            <Link to={`/glossary#${termKey}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+            <Link to={`/?page=glossary#${termKey}`} style={{ color: 'inherit', textDecoration: 'none' }}>
                 {displayText}
             </Link>
 

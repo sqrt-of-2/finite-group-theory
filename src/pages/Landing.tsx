@@ -1,3 +1,4 @@
+
 // src/pages/Landing.tsx
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
@@ -12,8 +13,6 @@ export const Landing: React.FC = () => {
     const fullCatalogIds = registry.getCatalog();
 
     // Load all groups to filter (small scale ok)
-    // In real app, we might have metadata separate from full load
-    // For now we assume registry.get() is fast enough or cached.
     const allGroups = useMemo(() => {
         return fullCatalogIds.map(g => {
             const group = registry.get(g.id);
@@ -75,14 +74,14 @@ export const Landing: React.FC = () => {
                     {notableGroups.map((item: any) => (
                         <li key={item.id} style={{ marginBottom: '0.5rem' }}>
                             <span>{item.prefix} {item.plural || item.secondTex ? 'are' : 'is'} </span>
-                            <Link to={`/group/${item.id}`}>
+                            <Link to={`/?group=${item.id}`}>
                                 <MathTex tex={item.tex} />
                             </Link>
                             {item.secondTex && (
                                 <>
                                     <span> and </span>
-                                    {/* Q8 link logic: hardcoded or inferred? Hardcoded for now. */}
-                                    <Link to={`/group/Q_8`}>
+                                    {/* Q8 link logic: hardcoded */}
+                                    <Link to={`/?group=Q_8`}>
                                         <MathTex tex={item.secondTex} />
                                     </Link>
                                 </>
@@ -122,7 +121,7 @@ export const Landing: React.FC = () => {
 
                 <div className="group-catalog">
                     {filtered.map(g => (
-                        <Link key={g.id} to={`/group/${g.id}`} className="card" style={{ display: 'block', color: 'inherit', textDecoration: 'none' }}>
+                        <Link key={g.id} to={`/?group=${g.id}`} className="card" style={{ display: 'block', color: 'inherit', textDecoration: 'none' }}>
                             <div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
                                 <MathTex tex={g.name} />
                             </div>

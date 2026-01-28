@@ -10,8 +10,15 @@ import { createQuotientGroup } from '../engine/quotients';
 import { getElementColor } from '../utils/colors';
 import { GlossaryLink } from '../components/GlossaryLink';
 
-export const GroupPage: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+interface GroupPageProps {
+    id?: string;
+}
+
+export const GroupPage: React.FC<GroupPageProps> = ({ id: propId }) => {
+    // Fallback to params if not passed props
+    const { id: paramId } = useParams<{ id: string }>();
+    const id = propId || paramId;
+
     const navigate = useNavigate();
     const [group, setGroup] = useState<IGroup | null>(null);
     const [loading, setLoading] = useState(true);
@@ -19,6 +26,8 @@ export const GroupPage: React.FC = () => {
     useEffect(() => {
         if (!id) return;
         setLoading(true);
+        // Small timeout to allow render cycle to clear previous state if needed or show loading
+        // (Also helps with large calculations not blocking UI instantly)
         setTimeout(() => {
             const g = registry.get(id);
             setGroup(g || null);
@@ -41,7 +50,8 @@ export const GroupPage: React.FC = () => {
         const quoId = `${id}_quo_${idx}`;
         // Register if not exists (or overwrite)
         registry.register(quoId, () => createQuotientGroup(group, sub));
-        navigate(`/group/${quoId}`);
+        // Use Query Param Navigation
+        navigate(`/?group=${quoId}`);
     };
 
     return (
@@ -67,8 +77,6 @@ export const GroupPage: React.FC = () => {
                     {props.isCyclic && <span className="badge">Cyclic</span>}
                     {props.isSimple && <span className="badge">Simple</span>}
                 </header>
-
-                {/* ... */}
 
                 <section id="facts" className="section">
                     <h2>Properties</h2>
