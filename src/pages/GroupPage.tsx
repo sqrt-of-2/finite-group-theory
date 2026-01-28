@@ -127,7 +127,7 @@ export const GroupPage: React.FC = () => {
                         <table className="cayley-table">
                             <thead>
                                 <tr>
-                                    <th>*</th>
+                                    <th><MathTex tex="\circ" /></th>
                                     {table.elements.map(e => (
                                         <th key={e} style={{ backgroundColor: '#f5f5f5' }}>
                                             <MathTex tex={group.elements.find(x => x.id === e)?.label || e} />
