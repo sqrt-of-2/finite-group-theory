@@ -33,7 +33,7 @@ export const GroupPage: React.FC = () => {
     const table = group.getCayleyTable();
     const subgroups = group.getSubgroups();
     const classes = group.conjugacyClasses();
-    const normalSubgroups = subgroups.filter(s => s.isNormal);
+    const normalSubgroups = subgroups.filter(s => s.isNormal).sort((a, b) => b.order - a.order);
 
     const handleExploreQuotient = (sub: Subgroup, idx: number) => {
         const quoId = `${group.id}_quo_${idx}`;
