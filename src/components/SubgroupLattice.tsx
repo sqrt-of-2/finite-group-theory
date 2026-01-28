@@ -98,7 +98,9 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
 
         layerOrders.forEach((ord, layerIdx) => {
             const indices = layers.get(ord)!;
-            const cy = height - padding - (layerIdx / (layerOrders.length - 1)) * (height - 2 * padding);
+            const cy = layerOrders.length > 1
+                ? height - padding - (layerIdx / (layerOrders.length - 1)) * (height - 2 * padding)
+                : height / 2;
 
             indices.forEach((idx, i) => {
                 const cx = (width * (i + 1)) / (indices.length + 1);
