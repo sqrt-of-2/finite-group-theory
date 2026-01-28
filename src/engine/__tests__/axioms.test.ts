@@ -77,7 +77,7 @@ describe('Group Axioms & Theorems', () => {
                 const props = group.getProperties();
                 const center = props.center;
                 // Verify every element in center commutes with everything
-                center.forEach(c => {
+                center?.forEach(c => {
                     elements.forEach(x => {
                         const cx = group.multiply(c, x.id);
                         const xc = group.multiply(x.id, c);

@@ -1,7 +1,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { createCn } from '../../engine/factory';
-import { IGroup, Subgroup } from '../../engine/types';
+import type { Subgroup } from '../../engine/types';
 
 // Logic copied from SubgroupLattice.tsx for verification
 const calculateEdges = (subgroups: Subgroup[]) => {

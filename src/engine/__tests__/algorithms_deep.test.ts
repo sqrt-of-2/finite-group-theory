@@ -1,7 +1,7 @@
 
 // src/engine/__tests__/algorithms_deep.test.ts
 import { describe, it, expect } from 'vitest';
-import { generateClosure, findConjugacyClasses, findAllSubgroups, findCenter, isAbelian } from '../algorithms';
+import { generateClosure, findConjugacyClasses, findCenter, isAbelian } from '../algorithms';
 
 // Mock simple integer multiplication modulo 12 for testing (Z_12)
 const addMod12 = (a: number, b: number) => (a + b) % 12;

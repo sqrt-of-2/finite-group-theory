@@ -11,10 +11,9 @@ function getElement(group: any, label: string) {
 }
 
 // Check if A = B in group
-function expectEqual(group: any, a: string, b: string) {
-    // a and b are IDs
-    expect(a).toBe(b);
-}
+// function expectEqual(a: string, b: string) {
+//     expect(a).toBe(b);
+// }
 
 // Check A * B = C
 function expectProd(group: any, a: string, b: string, result: string) {
@@ -73,7 +72,7 @@ describe('Group Relations Verification', () => {
         if (!q8) return;
 
         // Map labels to IDs
-        const e = getElement(q8, '1');
+        getElement(q8, '1');
         const i = getElement(q8, 'i');
         const j = getElement(q8, 'j');
         const k = getElement(q8, 'k');

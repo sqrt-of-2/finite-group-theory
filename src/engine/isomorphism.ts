@@ -5,7 +5,7 @@ import type { IGroup } from './types';
 function getElementOrderCounts(g: IGroup): Record<number, number> {
     const counts: Record<number, number> = {};
     for (const el of g.elements) {
-        const ord = el.order;
+        const ord = el.order || 0; // Fallback for safety
         counts[ord] = (counts[ord] || 0) + 1;
     }
     return counts;
@@ -103,7 +103,7 @@ function checkExplicitIsomorphism(g1: IGroup, g2: IGroup): boolean {
     const orders1 = gens1.map(gen => g1.elements.find(x => x.id === gen)!.order);
 
     // Candidates for each generator of G1 in G2 (must match order)
-    const candidates = gens1.map((gen, i) => {
+    const candidates = gens1.map((_, i) => {
         return elements2.filter(e2 => g2.elements.find(x => x.id === e2)!.order === orders1[i]);
     });
 

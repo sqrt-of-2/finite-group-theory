@@ -78,7 +78,7 @@ describe('Massive Permutation Tests', () => {
 
     // Specific arithmetic checks (30 tests)
     describe('Arithmetic Checks', () => {
-        const id = Permutation.identity(4);
+        Permutation.identity(4);
         const p1 = Permutation.fromCycles(4, [[1, 2]]);
         const p2 = Permutation.fromCycles(4, [[3, 4]]);
         const p3 = Permutation.fromCycles(4, [[1, 3]]);

@@ -70,7 +70,6 @@ class GroupRegistry {
 
     findIsomorphism(target: IGroup): IGroup | null {
         // Only check identifying properties first to avoid loading everything
-        const targetProps = target.getProperties();
 
         for (const id of Object.keys(this.loaders)) {
             // Optimization: Maybe we can check metadata before loading? 

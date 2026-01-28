@@ -1,8 +1,8 @@
 
 import { describe, it, expect } from 'vitest';
-import { calculateLattice, LatticeGraph } from '../lattice';
-import { createCn, createKlein4, createSn, createDn } from '../factory';
-import { registry } from '../registry';
+import { calculateLattice } from '../lattice';
+import { createCn, createKlein4, createSn } from '../factory';
+
 
 describe('Lattice Algorithm (Rank-Based Topology)', () => {
 

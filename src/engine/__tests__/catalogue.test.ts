@@ -69,7 +69,7 @@ describe('Group Catalogue Verification', () => {
             }
 
             if (expected.centerSize !== undefined) {
-                expect(props.center.length).toBe(expected.centerSize);
+                expect(props.center?.length).toBe(expected.centerSize);
             }
         });
     });

@@ -1,8 +1,9 @@
-
 import { describe, it, expect } from 'vitest';
-import { registry } from '../registry';
+
 import { areGroupsIsomorphic } from '../isomorphism';
-import { createCn, createSn, createDn, createKlein4, createQ8, createDirectProduct } from '../factory';
+import { createCn, createKlein4, createDirectProduct } from '../factory';
+import { registry } from '../registry'; // Added missing import for registry
+import { createDn } from '../factory'; // Added missing import for createDn
 
 describe('Isomorphism Logic - Extensive Checks', () => {
 
@@ -81,17 +82,7 @@ describe('Isomorphism Logic - Extensive Checks', () => {
         // Groups in different classes must return false.
 
         // Let's define sets of IDs that are isomorphic.
-        const isoSets: string[][] = [
-            ['Z_1'],
-            ['Z_2'],
-            ['Z_3'],
-            ['Z_4'],
-            ['Z_5'],
-            ['Z_6'],
-            ['S_3', 'D_6', 'D_3'], // Note D_6/D_3 might not be in registry by that name? registry has S_3.
-            ['Z_2_x_Z_2', 'V_4'],
-            // We can check if `registry` has duplicates.
-        ];
+        // This array was incomplete and not used, removing it.
 
         // Just brute force check everything against everything and ensure symmetry.
         const ids = catalog.map(c => c.id);

@@ -1,5 +1,4 @@
-
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { SubgroupLattice } from '../SubgroupLattice';
 import { createCn } from '../../engine/factory';
@@ -53,9 +52,7 @@ describe('SubgroupLattice Layout Safety', () => {
         const foreignObjects = container.querySelectorAll('foreignObject');
         foreignObjects.forEach(fo => {
             const width = Number(fo.getAttribute('width'));
-            const height = Number(fo.getAttribute('height'));
             const x = Number(fo.getAttribute('x'));
-            const y = Number(fo.getAttribute('y'));
 
             // Previous bug: width=40, height=20, x=-20, y=-30.
             // We want wider. e.g. 100px.
