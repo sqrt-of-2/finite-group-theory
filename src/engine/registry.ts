@@ -9,14 +9,18 @@ import { createCn, createSn, createDn, createKlein4, createAn, createQ8, createD
 class GroupRegistry {
     private groups: Record<string, IGroup> = {};
     private loaders: Record<string, () => IGroup> = {};
+    private catalogIds: Set<string> = new Set();
 
-    register(id: string, loader: () => IGroup) {
+    register(id: string, loader: () => IGroup, addToCatalog: boolean = true) {
         this.loaders[id] = loader;
+        if (addToCatalog) {
+            this.catalogIds.add(id);
+        }
     }
 
     get(id: string): IGroup | undefined {
         if (this.groups[id]) return this.groups[id];
-
+        // ... (rest is same)
         // Try static loaders
         if (this.loaders[id]) {
             try {
@@ -27,9 +31,13 @@ class GroupRegistry {
                 throw e;
             }
         }
-
+        // ...
         // Dynamic Quotient Loading: "BaseID_quo_Index"
+        // (Existing logic handles implicit loading if base exists, 
+        //  but if explicitly registered via handleExploreQuotient, it hits loaders[id] above)
+
         const quoMatch = id.match(/^(.*)_quo_(\d+)$/);
+        // ... (rest is same)
         if (quoMatch) {
             const [, baseId, idxStr] = quoMatch;
             const index = parseInt(idxStr, 10);
@@ -57,7 +65,7 @@ class GroupRegistry {
     }
 
     getCatalog(): { id: string, name: string }[] {
-        return Object.keys(this.loaders).map(id => ({ id, name: id }));
+        return Array.from(this.catalogIds).map(id => ({ id, name: id }));
     }
 
     findIsomorphism(target: IGroup): IGroup | null {
