@@ -247,15 +247,13 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
                             stroke="#0044cc"
                             strokeWidth={node.isNormal ? 2 : 1}
                         />
-                        <text
-                            dy={-15}
-                            textAnchor="middle"
-                            fontSize="10"
-                            fill="#666"
-                            pointerEvents="none"
-                        >
-                            {node.name || (node.order === 1 ? 'e' : (node.order === groupOrder ? 'G' : `H_${node.id}`))}
-                        </text>
+                        <foreignObject x="-20" y="-30" width="40" height="20">
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%', pointerEvents: 'none' }}>
+                                <span style={{ fontSize: '10px', color: '#666' }}>
+                                    <MathTex tex={node.name || (node.order === 1 ? 'e' : (node.order === groupOrder ? 'G' : `H_${node.id}`))} />
+                                </span>
+                            </div>
+                        </foreignObject>
                     </g>
                 ))}
             </svg>
