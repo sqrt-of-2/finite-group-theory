@@ -36,7 +36,9 @@ export const GroupPage: React.FC = () => {
     const normalSubgroups = subgroups.filter(s => s.isNormal).sort((a, b) => b.order - a.order);
 
     const handleExploreQuotient = (sub: Subgroup, idx: number) => {
-        const quoId = `${group.id}_quo_${idx}`;
+        // Use the current route ID as base to ensure URL safety and recursion
+        // e.g. S_3 -> S_3_quo_0 -> S_3_quo_0_quo_1
+        const quoId = `${id}_quo_${idx}`;
         // Register if not exists (or overwrite)
         registry.register(quoId, () => createQuotientGroup(group, sub));
         navigate(`/group/${quoId}`);

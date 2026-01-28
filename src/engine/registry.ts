@@ -3,6 +3,7 @@
 import type { IGroup } from './types';
 // ... imports
 import { areGroupsIsomorphic } from './isomorphism';
+import { createQuotientGroup } from './quotients';
 import { createCn, createSn, createDn, createKlein4, createAn, createQ8, createDirectProduct, createDic3 } from './factory';
 
 class GroupRegistry {
@@ -15,15 +16,43 @@ class GroupRegistry {
 
     get(id: string): IGroup | undefined {
         if (this.groups[id]) return this.groups[id];
+
+        // Try static loaders
         if (this.loaders[id]) {
             try {
                 this.groups[id] = this.loaders[id]();
+                return this.groups[id];
             } catch (e) {
                 console.error(`Failed to load group ${id}`, e);
                 throw e;
             }
-            return this.groups[id];
         }
+
+        // Dynamic Quotient Loading: "BaseID_quo_Index"
+        const quoMatch = id.match(/^(.*)_quo_(\d+)$/);
+        if (quoMatch) {
+            const [, baseId, idxStr] = quoMatch;
+            const index = parseInt(idxStr, 10);
+
+            const baseGroup = this.get(baseId);
+            if (baseGroup) {
+                // We must reproduce the exact ordering logic used in GroupPage
+                const subgroups = baseGroup.getSubgroups();
+                // Logic from GroupPage: filter(normal).sort(order desc)
+                // We MUST duplicate this logic here for consistency.
+                const normalSubgroups = subgroups.filter(s => s.isNormal).sort((a, b) => b.order - a.order);
+
+                const sub = normalSubgroups[index];
+                if (sub) {
+                    const quotient = createQuotientGroup(baseGroup, sub);
+                    // Identify it immediately (optional, but good for cache)
+                    // quotient.id is usually internal format, but we register it under the requested safe ID
+                    this.groups[id] = quotient;
+                    return quotient;
+                }
+            }
+        }
+
         return undefined;
     }
 
