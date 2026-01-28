@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://sqrt-of-2.github.io/finite-group-theory",
+  "homepage": "https://sqrt-of-2.github.io",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
