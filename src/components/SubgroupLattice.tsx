@@ -92,7 +92,7 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
         // Compute positions
         const width = 600;
         const height = 400;
-        const padding = 50;
+        const padding = 60; // Increased from 50 to allow room for labels
 
         const nodePositions = new Map<number, { x: number, y: number }>();
 
@@ -190,7 +190,7 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
         const coreSet = getCore(group, node);
         const coreElements = Array.from(coreSet).map(e => group.elements.find(x => x.id === e)?.label || e).join(', ');
 
-        const primes = getPrimes(60);
+        const primes = getPrimes();
         const isPrime = primes.has(node.order);
 
         // Styling for tooltip
@@ -247,9 +247,10 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
                             stroke="#0044cc"
                             strokeWidth={node.isNormal ? 2 : 1}
                         />
-                        <foreignObject x="-20" y="-30" width="40" height="20">
+                        {/* Increased dimensions to avoid clipping textual labels like G = Z_12 */}
+                        <foreignObject x="-60" y="-35" width="120" height="30">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%', pointerEvents: 'none' }}>
-                                <span style={{ fontSize: '10px', color: '#666' }}>
+                                <span style={{ fontSize: '10px', color: '#666', whiteSpace: 'nowrap' }}>
                                     <MathTex tex={node.name || (node.order === 1 ? '\\{e\\}' : (node.order === groupOrder ? `G = ${group.displayName}` : `H_{${node.id}}`))} />
                                 </span>
                             </div>
