@@ -87,8 +87,6 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
         };
 
         const nodePositions = new Map<number, { x: number, y: number }>();
-        const layerCount = layerKeys.length;
-
         // X-positions determined by Rank-based layers (to maintain horizontal separation of incomparable subgroups)
         layerKeys.forEach((rank) => {
             const indices = layers.get(rank)!;
@@ -207,18 +205,19 @@ export const SubgroupLattice: React.FC<SubgroupLatticeProps> = ({ subgroups, gro
                 {nodes.map(node => (
                     <g
                         key={node.id}
-                        transform={`translate(${node.x}, ${node.y})`}
                         onMouseEnter={(e) => handleMouseEnter(node, e)}
                         onMouseLeave={handleMouseLeave}
                         style={{ cursor: 'pointer' }}
                     >
                         <circle
+                            cx={node.x}
+                            cy={node.y}
                             r={node.isNormal ? 12 : 8}
                             fill={node.isNormal ? '#e6f0ff' : 'white'}
                             stroke="#0044cc"
                             strokeWidth={node.isNormal ? 2 : 1}
                         />
-                        <foreignObject x="-60" y="-35" width="120" height="30">
+                        <foreignObject x={node.x - 60} y={node.y - 35} width="120" height="30">
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%', pointerEvents: 'none' }}>
                                 <span style={{ fontSize: '10px', color: '#666', whiteSpace: 'nowrap' }}>
                                     <MathTex tex={node.name || (node.order === 1 ? '\\{e\\}' : (node.order === groupOrder ? `G = ${group.displayName}` : `H_{${node.id}}`))} />
